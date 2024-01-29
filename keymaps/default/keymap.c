@@ -2,6 +2,7 @@
 #include "analog.h"
 #include QMK_KEYBOARD_H
 
+
 /* Layers */
 enum layers {
     _QWERTY,
@@ -201,79 +202,80 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
 /* Joystick */
 #ifdef JOYSTICK_ENABLE
 
-#define JS_OFFSET_X 226
-#define JS_OFFSET_Y 264
-#define JS_TRESHOLD 512
-#define JS_DEAD 50
-
   int16_t JS_X = 0;
   int16_t JS_Y = 0;
-
   bool JS_U = false;
   bool JS_D = false;
   bool JS_L = false;
   bool JS_R = false;
 
 void matrix_scan_user(void) {
-  JS_X = analogReadPin(ANALOG_JOYSTICK_X_AXIS_PIN) - JS_OFFSET_X;
-  JS_Y = analogReadPin(ANALOG_JOYSTICK_Y_AXIS_PIN) - JS_OFFSET_Y;
+if (is_keyboard_master()) {
+/* Joystick Test Code for Middle Value Check (※ Add #include "print.h")
+  while (true) {
+    uprintf("x: %d, y: %d\n", JS_X, JS_Y);
+    wait_ms(1000);
+  }
+*/
 
-  if (!IS_LAYER_ON(_RAISE)) {
-    if (!JS_R && JS_X > JS_TRESHOLD+JS_DEAD) {
+  JS_X = analogReadPin(JS_X_PIN);
+  JS_Y = analogReadPin(JS_Y_PIN);
+
+  if (IS_LAYER_OFF(_RAISE)) {
+    if (!JS_R && JS_X > JS_X_MID+JS_DEAD) {
       JS_R = true;
       register_code(KC_WH_R);
-    } else if (JS_R && JS_X < JS_TRESHOLD+JS_DEAD) {
+    } else if (JS_R && JS_X < JS_X_MID+JS_DEAD) {
       JS_R = false;
       unregister_code(KC_WH_R);
-    } else if (!JS_L && JS_X < JS_TRESHOLD-JS_DEAD) {
+    } else if (!JS_L && JS_X < JS_X_MID-JS_DEAD) {
       JS_L = true;
       register_code(KC_WH_L);
-    } else if (JS_L && JS_X > JS_TRESHOLD-JS_DEAD) {
+    } else if (JS_L && JS_X > JS_X_MID-JS_DEAD) {
       JS_L = false;
       unregister_code(KC_WH_L);
     }
-
-    if (!JS_D && JS_Y > JS_TRESHOLD+JS_DEAD) {
+    if (!JS_D && JS_Y > JS_Y_MID+JS_DEAD) {
       register_code(KC_WH_D);
       JS_D = true;
-    } else if (JS_D && JS_Y < JS_TRESHOLD+JS_DEAD) {
+    } else if (JS_D && JS_Y < JS_Y_MID+JS_DEAD) {
       JS_D = false;
       unregister_code(KC_WH_D);
-    } else if (!JS_U && JS_Y < JS_TRESHOLD-JS_DEAD) {
+    } else if (!JS_U && JS_Y < JS_Y_MID-JS_DEAD) {
       JS_U = true;
       register_code(KC_WH_U);
-    } else if (JS_U && JS_Y > JS_TRESHOLD-JS_DEAD) {
+    } else if (JS_U && JS_Y > JS_Y_MID-JS_DEAD) {
       JS_U = false;
       unregister_code(KC_WH_U);
     }
   } else {
-    if (!JS_R && JS_X > JS_TRESHOLD+JS_DEAD) {
+    if (!JS_R && JS_X > JS_X_MID+JS_DEAD) {
       JS_R = true;
       register_code(KC_RIGHT);
-    } else if (JS_R && JS_X < JS_TRESHOLD+JS_DEAD) {
+    } else if (JS_R && JS_X < JS_X_MID+JS_DEAD) {
       JS_R = false;
       unregister_code(KC_RIGHT);
-    } else if (!JS_L && JS_X < JS_TRESHOLD-JS_DEAD) {
+    } else if (!JS_L && JS_X < JS_X_MID-JS_DEAD) {
       JS_L = true;
       register_code(KC_LEFT);
-    } else if (JS_L && JS_X > JS_TRESHOLD-JS_DEAD) {
+    } else if (JS_L && JS_X > JS_X_MID-JS_DEAD) {
       JS_L = false;
       unregister_code(KC_LEFT);
     }
-
-    if (!JS_D && JS_Y > JS_TRESHOLD+JS_DEAD) {
+    if (!JS_D && JS_Y > JS_Y_MID+JS_DEAD) {
       register_code(KC_DOWN);
       JS_D = true;
-    } else if (JS_D && JS_Y < JS_TRESHOLD+JS_DEAD) {
+    } else if (JS_D && JS_Y < JS_Y_MID+JS_DEAD) {
       JS_D = false;
       unregister_code(KC_DOWN);
-    } else if (!JS_U && JS_Y < JS_TRESHOLD-JS_DEAD) {
+    } else if (!JS_U && JS_Y < JS_Y_MID-JS_DEAD) {
       JS_U = true;
       register_code(KC_UP);
-    } else if (JS_U && JS_Y > JS_TRESHOLD-JS_DEAD) {
+    } else if (JS_U && JS_Y > JS_Y_MID-JS_DEAD) {
       JS_U = false;
       unregister_code(KC_UP);
     }
   }
+}
 };
 #endif
