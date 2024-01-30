@@ -2,10 +2,9 @@
 #include "analog.h"
 #include QMK_KEYBOARD_H
 
-
 /* Layers */
 enum layers {
-    _QWERTY,
+    _QWERTY = 0,
     _LOWER,
     _RAISE,
     _CHAR
@@ -211,6 +210,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
 
 void matrix_scan_user(void) {
   if (is_keyboard_master()) {
+    JS_X = analogReadPin(JS_X_PIN);
+    JS_Y = analogReadPin(JS_Y_PIN);
+
   /* Joystick Test Code for Middle Value Check (※ Add #include "print.h")
     while (true) {
       uprintf("x: %d, y: %d\n", JS_X, JS_Y);
@@ -218,10 +220,7 @@ void matrix_scan_user(void) {
     }
   */
 
-    JS_X = analogReadPin(JS_X_PIN);
-    JS_Y = analogReadPin(JS_Y_PIN);
-
-    if (IS_LAYER_OFF(_RAISE)) {
+    if (IS_LAYER_ON(0)) {
       if (!JS_R && JS_X > JS_X_MID+JS_DEAD) {
         JS_R = true;
         register_code(KC_WH_R);
