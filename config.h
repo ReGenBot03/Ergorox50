@@ -32,14 +32,11 @@
 #define POINTING_DEVICE_GESTURES_SCROLL_ENABLE
 
 /* Left Thumb Device Settings - Joystick */
-#define JOYSTICK_AXIS_COUNT 2
-#define JOYSTICK_BUTTON_COUNT 0
 #define JS_X_PIN GP28
-#define JS_X_MID 720
 #define JS_Y_PIN GP29
+#define JS_X_MID 720
 #define JS_Y_MID 755
-#define JS_DEAD 150
-
+#define JS_DEAD 200
 
 /* RGB Backlight */
 #define NOP_FUDGE 0.4

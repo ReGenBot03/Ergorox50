@@ -1,6 +1,13 @@
-#include "quantum.h"
 #include "analog.h"
 #include QMK_KEYBOARD_H
+
+/* Variables for Joystick */
+  int16_t JS_X = 0;
+  int16_t JS_Y = 0;
+  bool JS_U = false;
+  bool JS_D = false;
+  bool JS_L = false;
+  bool JS_R = false;
 
 /* Layers */
 enum layers {
@@ -26,7 +33,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
     LT(3,KC_TAB), KC_A,          KC_S,           KC_D,         KC_F,           KC_G,                  KC_H,          KC_J,           KC_K,         KC_L,           KC_SCLN,     KC_ENT,  
     KC_LSFT,       KC_GRV,       KC_Z,           KC_X,         KC_C,          KC_V,                  KC_B,           KC_N,          KC_M,        KC_DOT,       KC_SLSH,     KC_RSFT, 
     KC_LCTL,       KC_LGUI,      KC_LALT,       KC_RALT,    KC_SPC,       LT(1,KC_SPC),         LT(2,KC_SPC), KC_SPC,       KC_LEFT,     KC_DOWN,    KC_UP,        KC_RGHT,
-    _______,         _______,        _______,         _______,       KC_LCTL,     LT(1,KC_SPC),         KC_BTN1,      KC_BTN2,        _______,       _______,        _______,        _______ ),
+    KC_BTN3,       _______,        _______,         _______,      KC_BTN1,    LT(2,KC_BTN2),       LT(2,KC_BTN1),KC_BTN2,      _______,      _______,        _______,        _______ ),
 
   /* Lower */
   [_LOWER] = LAYOUT_ergorox( \
@@ -34,7 +41,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
     KC_CAPS,       KC_4,           KC_5,           KC_6,         M_01,         M_02,                   M_03,         KC_MINS,     KC_PLUS,     KC_EQL,       KC_QUOT,   _______, 
     _______,          KC_7,           KC_8,          KC_9,          M_04,        M_05,                    M_06,         KC_LABK,     KC_RABK,     KC_COMM,   KC_BSLS,   _______, 
     _______,          KC_0,           KC_DOT,      KC_RCTL,     KC_F2,        _______,                  KC_MUTE,     KC_DEL,       KC_LBRC,     KC_PGDN,     KC_PGUP,    KC_RBRC, 
-    _______,         _______,        _______,        _______,        _______,       _______,                   _______,         _______,        _______,       _______,        _______,        _______ ),
+    _______,         _______,        _______,        _______,        _______,       KC_BSPC,                KC_VOLD,     KC_VOLU,     _______,       _______,        _______,        _______ ),
 
   /* Raise */
   [_RAISE] = LAYOUT_ergorox( \
@@ -42,7 +49,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
     KC_NUM,      MEH(KC_B),   LCA(KC_S),    S(KC_F6),      S(KC_F5),      LCA(KC_G),           C(KC_M),      C(KC_J),        C(S(KC_I)),    C(KC_O),      KC_DQUO,    A(KC_ENT), 
     _______,         LCA(KC_I),    C(KC_Z),       C(KC_A),       C(KC_C),       C(S(KC_V)),            M_07,         M_08,          M_09,        KC_UNDS,     KC_AT,         _______, 
     _______,         _______,        _______,        _______,       SGUI(KC_S),    KC_PSCR,             _______,        KC_X,          C(KC_LEFT),  C(KC_DOWN), C(KC_UP),     C(KC_RGHT),
-    _______,         _______,        _______,        _______,       _______,         _______,                _______,        _______,        _______,       _______,        _______,        _______ ),
+    KC_BTN1,      _______,        _______,        _______,       KC_BTN3,       _______,               _______,        KC_BTN3,      _______,       _______,        _______,        _______ ),
 
   /* Special Character */
   [_CHAR] = LAYOUT_ergorox( \
@@ -50,7 +57,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
     _______,         SC_A,          SC_S,           SC_D,         _______,        _______,                SC_H,          _______,        _______,       _______,        _______,        _______, 
     RGB_MOD,    RGB_HUD,     RGB_HUI,      SC_X,         SC_C,          SC_V,                   _______,        SC_LB,         SC_RB,        SC_DOT,       SC_DDOT,    SC_RR, 
     QK_BOOT,      _______,        _______,         _______,      M_SP,          _______,                _______,        M_SP,          SC_LEFT,     SC_DOWN,    SC_UP,        SC_RGHT,
-    _______,          _______,        _______,        _______,       _______,        _______,                _______,        _______,         _______,       _______,        _______,        _______ )
+    _______,          _______,        _______,        _______,      KC_BSPC,      KC_ENT,                _______,        _______,         _______,       _______,        _______,        _______ )
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record)
@@ -59,6 +66,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
   {
     switch(keycode)
     {
+        /* Hotkeys */
       case M_00 : /* Zoom Reset */
         SEND_STRING( SS_DOWN(X_LCTL)  SS_TAP(X_P0)  SS_UP(X_LCTL) );
         return false;
@@ -199,26 +207,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
 };
 
 /* Joystick */
-#ifdef JOYSTICK_ENABLE
-
-  int16_t JS_X = 0;
-  int16_t JS_Y = 0;
-  bool JS_U = false;
-  bool JS_D = false;
-  bool JS_L = false;
-  bool JS_R = false;
+void pointing_device_init_user(void){
+  if (is_keyboard_master()) {
+    setPinInputHigh(JS_X_PIN);
+    setPinInputHigh(JS_Y_PIN);
+  }
+};
 
 void matrix_scan_user(void) {
   if (is_keyboard_master()) {
     JS_X = analogReadPin(JS_X_PIN);
     JS_Y = analogReadPin(JS_Y_PIN);
 
-  /* Joystick Test Code for Middle Value Check (※ Add #include "print.h")
+  /* Joystick Test Code for Middle Value Check (※ Add #include "print.h") 
     while (true) {
       uprintf("x: %d, y: %d\n", JS_X, JS_Y);
       wait_ms(1000);
-    }
-  */
+    }  */
 
     if (IS_LAYER_ON(0)) {
       if (!JS_R && JS_X > JS_X_MID+JS_DEAD) {
@@ -247,6 +252,35 @@ void matrix_scan_user(void) {
         JS_U = false;
         unregister_code(KC_WH_U);
       }
+
+    } else if (IS_LAYER_ON(2)) {
+      if (!JS_R && JS_X > JS_X_MID+JS_DEAD) {
+        JS_R = true;
+        register_code(KC_MS_R);
+      } else if (JS_R && JS_X < JS_X_MID+JS_DEAD) {
+        JS_R = false;
+        unregister_code(KC_MS_R);
+      } else if (!JS_L && JS_X < JS_X_MID-JS_DEAD) {
+        JS_L = true;
+        register_code(KC_MS_L);
+      } else if (JS_L && JS_X > JS_X_MID-JS_DEAD) {
+        JS_L = false;
+        unregister_code(KC_MS_L);
+      }
+      if (!JS_D && JS_Y > JS_Y_MID+JS_DEAD) {
+        register_code(KC_MS_D);
+        JS_D = true;
+      } else if (JS_D && JS_Y < JS_Y_MID+JS_DEAD) {
+        JS_D = false;
+        unregister_code(KC_MS_D);
+      } else if (!JS_U && JS_Y < JS_Y_MID-JS_DEAD) {
+        JS_U = true;
+        register_code(KC_MS_U);
+      } else if (JS_U && JS_Y > JS_Y_MID-JS_DEAD) {
+        JS_U = false;
+        unregister_code(KC_MS_U);
+      }
+
     } else {
       if (!JS_R && JS_X > JS_X_MID+JS_DEAD) {
         JS_R = true;
@@ -277,4 +311,3 @@ void matrix_scan_user(void) {
     }
   }
 };
-#endif
