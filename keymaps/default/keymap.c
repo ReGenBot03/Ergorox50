@@ -9,22 +9,12 @@
   bool JS_L = false;
   bool JS_R = false;
 
-/* Layers */
-enum layers {
-    _QWERTY = 0,
-    _LOWER,
-    _RAISE,
-    _CHAR
-};
+/* Layers Macros */
+enum layers { _QWERTY = 0, _LOWER, _RAISE, _CHAR };
+enum { M_00 = SAFE_RANGE, M_01, M_02, M_03, M_04, M_05, M_06, M_07, M_08, M_09, M_10, M_11, M_12, M_13, M_SP, 
+          SC_A, SC_S, SC_C, SC_V, SC_D, SC_R, SC_O, SC_X, SC_PM, SC_DOT, SC_DDOT, SC_LEFT, SC_RGHT, SC_UP, SC_DOWN, SC_RR, SC_LB, SC_RB, SC_H };
 
-/* Macros */
-enum
-{
-  M_00 = SAFE_RANGE,
-  M_01, M_02, M_03, M_04, M_05, M_06, M_07, M_08, M_09, M_10, M_11, M_12, M_13, M_SP, 
-  SC_A, SC_S, SC_C, SC_V, SC_D, SC_R, SC_O, SC_X, SC_PM, SC_DOT, SC_DDOT, SC_LEFT, SC_RGHT, SC_UP, SC_DOWN, SC_RR, SC_LB, SC_RB, SC_H
-};
-
+/* Keymap */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = 
 {
   /* Qwerty */
@@ -33,7 +23,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
     LT(3,KC_TAB), KC_A,          KC_S,           KC_D,         KC_F,           KC_G,                  KC_H,          KC_J,           KC_K,         KC_L,           KC_SCLN,     KC_ENT,  
     KC_LSFT,       KC_GRV,       KC_Z,           KC_X,         KC_C,          KC_V,                  KC_B,           KC_N,          KC_M,        KC_DOT,       KC_SLSH,     KC_RSFT, 
     KC_LCTL,       KC_LGUI,      KC_LALT,       KC_RALT,    KC_SPC,       LT(1,KC_SPC),         LT(2,KC_SPC), KC_SPC,       KC_LEFT,     KC_DOWN,    KC_UP,        KC_RGHT,
-    KC_BTN3,       _______,        _______,         _______,      KC_BTN1,    LT(2,KC_BTN2),       LT(2,KC_BTN1),KC_BTN2,      _______,      _______,        _______,        _______ ),
+    KC_BTN3,       _______,        _______,         _______,      KC_BTN1,    LT(2,KC_BTN2),       LT(3,KC_BTN1),KC_BTN2,      _______,      _______,        _______,        _______ ),
 
   /* Lower */
   [_LOWER] = LAYOUT_ergorox( \
@@ -49,15 +39,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
     KC_NUM,      MEH(KC_B),   LCA(KC_S),    S(KC_F6),      S(KC_F5),      LCA(KC_G),           C(KC_M),      C(KC_J),        C(S(KC_I)),    C(KC_O),      KC_DQUO,    A(KC_ENT), 
     _______,         LCA(KC_I),    C(KC_Z),       C(KC_A),       C(KC_C),       C(S(KC_V)),            M_07,         M_08,          M_09,        KC_UNDS,     KC_AT,         _______, 
     _______,         _______,        _______,        _______,       SGUI(KC_S),    KC_PSCR,             _______,        KC_X,          C(KC_LEFT),  C(KC_DOWN), C(KC_UP),     C(KC_RGHT),
-    KC_BTN1,      _______,        _______,        _______,       KC_BTN3,       _______,               _______,        KC_BTN3,      _______,       _______,        _______,        _______ ),
+    KC_BTN1,      _______,        _______,        _______,       KC_BTN3,       _______,               KC_VOLD,     KC_VOLU,      _______,       _______,        _______,        _______ ),
 
   /* Special Character */
   [_CHAR] = LAYOUT_ergorox( \
     KC_ENT,        RGB_SAD,     RGB_SAI,      _______,       SC_R,          RGB_TOG,             _______,         _______,        _______,       SC_O,          SC_PM,        _______, 
     _______,         SC_A,          SC_S,           SC_D,         _______,        _______,                SC_H,          _______,        _______,       _______,        _______,        _______, 
     RGB_MOD,    RGB_HUD,     RGB_HUI,      SC_X,         SC_C,          SC_V,                   _______,        SC_LB,         SC_RB,        SC_DOT,       SC_DDOT,    SC_RR, 
-    QK_BOOT,      _______,        _______,         _______,      M_SP,          _______,                _______,        M_SP,          SC_LEFT,     SC_DOWN,    SC_UP,        SC_RGHT,
-    _______,          _______,        _______,        _______,      KC_BSPC,      KC_ENT,                _______,        _______,         _______,       _______,        _______,        _______ )
+    QK_BOOT,      _______,        _______,         _______,      M_SP,          _______,                _______,        M_SP,         SC_LEFT,     SC_DOWN,    SC_UP,        SC_RGHT,
+    _______,          _______,        _______,        _______,      KC_BSPC,      KC_ENT,                _______,        KC_BTN3,     _______,       _______,        _______,        _______ )
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record)
@@ -206,7 +196,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
   return true;
 };
 
-/* Joystick */
+/* Initialization for Joystick and Trackpad */
 void pointing_device_init_user(void){
   if (is_keyboard_master()) {
     setPinInputHigh(JS_X_PIN);
@@ -214,12 +204,13 @@ void pointing_device_init_user(void){
   }
 };
 
+/* Joystick */
 void matrix_scan_user(void) {
   if (is_keyboard_master()) {
     JS_X = analogReadPin(JS_X_PIN);
     JS_Y = analogReadPin(JS_Y_PIN);
 
-  /* Joystick Test Code for Middle Value Check (※ Add #include "print.h") 
+  /* Test Code for Middle Value Check (※ Add #include "print.h") 
     while (true) {
       uprintf("x: %d, y: %d\n", JS_X, JS_Y);
       wait_ms(1000);
