@@ -3,9 +3,13 @@
 
 
 
+
+
 ### Schematic :
 
 ![Schematics](https://github.com/ReGenBot03/Ergorox50/assets/91839809/fec0b9b0-1860-4a34-aec3-939f6f8d70a2)
+
+
 
 
 
@@ -16,7 +20,10 @@
 
 ###### PCB and encloser is still in WIP state.
 
+
 ###### I'll release them soon when get to ready to publish.
+
+
 
 
 
