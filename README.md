@@ -6,23 +6,23 @@
 
    
 ### Schematic :
--------------
-![Schematics](https://github.com/ReGenBot03/Ergorox50/assets/91839809/fec0b9b0-1860-4a34-aec3-939f6f8d70a2)
 
+![Schematics](https://github.com/ReGenBot03/Ergorox50/assets/91839809/fec0b9b0-1860-4a34-aec3-939f6f8d70a2)
+-------------
 
 
 
    
 ### Encloser :
--------------
-![Render](https://github.com/ReGenBot03/Ergorox50/assets/91839809/fbb05d9c-7d97-4978-98da-124391cb2b66)
 
+![Render](https://github.com/ReGenBot03/Ergorox50/assets/91839809/fbb05d9c-7d97-4978-98da-124391cb2b66)
+-------------
 
 
 
    
 ### BOM
--------------
+
 |Item|Quantity|Link|
 |-----------------------------------|-----------|-------------------------------------------------------------|
 |minimal-fpc-i2c-pcb*|1|https://github.com/keyboard-magpie/minimal-fpc-i2c-pcb|
@@ -41,13 +41,13 @@
 ##### *Strongly recommend [minimal-fpc-i2c-pcb] is order with assembly service (PCBA) 
 
 
-##### PCB and encloser is still in WIP state.
-
+##### Please understand that PCBs and enclosers are still in WIP state.
+-------------
 
 
    
 ### Special Thanks :
--------------
+
 My friend Rox for awsome naming
 
 elpekeñin from QMK Discord
