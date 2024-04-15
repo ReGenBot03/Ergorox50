@@ -21,7 +21,7 @@
 
 
    
-### BOM
+### BOM :
 
 |Item|Quantity|Link|
 |-----------------------------------|-----------|-------------------------------------------------------------|
@@ -46,7 +46,7 @@
 
 
    
-### Special Thanks :
+### Special Thanks to :
 
 My friend Rox for awsome naming
 
