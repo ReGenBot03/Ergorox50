@@ -31,14 +31,16 @@
 |TTC Hotswap Socket|52|https://ko.aliexpress.com/item/1005004922507959.html|
 |SK6803 MINI-E 3MA|52|https://ko.aliexpress.com/item/1005003636565847.html|
 |SOD123 Diode (1N4148W T4)|53|https://ko.aliexpress.com/item/32921490945.html|
+|C Type Socket (Male & Female Set)|2|https://ko.aliexpress.com/item/1005005874481984.html|
 |TRRS Socket|2|https://ko.aliexpress.com/item/32860019036.html|
 |TRRS Cable|1|https://ko.aliexpress.com/item/1005005658312762.html|
 |JST 2.0 PH Wire & Socket (6pin)|6||
 |JST 2.0 PH Wire & Socket (2pin)|2||
 |Cirque 40mm Curved Trackpad|1||
+|FFC Cable (Forward, 0.5mm Pitch)|1|https://ko.aliexpress.com/item/1005006020830114.html|
 |MX Switches + Keycaps|52||
 
-##### *Strongly recommend [minimal-fpc-i2c-pcb] is order with assembly service (PCBA) 
+##### *Strongly recommend that [minimal-fpc-i2c-pcb] order with assembly service (PCBA) 
 
 
 ##### Please understand that PCBs and enclosers are still in WIP state.
